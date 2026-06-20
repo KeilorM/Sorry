@@ -2,13 +2,19 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Lo siento</title>
 <style>
   * { box-sizing: border-box; }
 
-  body {
+  html, body {
     margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -81,10 +87,67 @@
     border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    width: 100%;
   }
 
-  iframe {
-    border-radius: 14px;
+  .spotify-wrapper iframe {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  /* ---------- Tablets ---------- */
+  @media (max-width: 600px) {
+    .card {
+      padding: 36px 26px;
+      border-radius: 20px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+    }
+
+    p {
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    .heart {
+      font-size: 2.1rem;
+    }
+
+    .spotify-wrapper iframe {
+      height: 232px;
+    }
+  }
+
+  /* ---------- Celulares chicos ---------- */
+  @media (max-width: 380px) {
+    body {
+      padding: 12px;
+    }
+
+    .card {
+      padding: 28px 18px;
+      border-radius: 16px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 0.92rem;
+    }
+
+    .spotify-wrapper {
+      margin-top: 22px;
+    }
+
+    .spotify-wrapper iframe {
+      height: 152px; /* versión compacta sin portada grande */
+    }
   }
 </style>
 </head>
@@ -95,8 +158,7 @@
     <p>
       Sé que mis acciones te lastimaron, y eso pesa en mí. No busco excusas,
       solo quiero que sepas que lo siento de verdad y que voy a esforzarme
-      por hacerlo mejor. Sé que dijiste que no es lo mismo decir que hacer y eso me llevó a esto.
-      Tal vez yo no sea la mejor persona pero le puedo asegurar que me voy a esforzar por recuperar su confianza.
+      por hacerlo mejor.
     </p>
     <p>
       Gracias por leer hasta acá. Espero que esta canción diga
