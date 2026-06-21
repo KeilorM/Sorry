@@ -59,6 +59,14 @@
   body.night .envelope-flap { background: linear-gradient(160deg, #5c4789, #40316b); }
   body.night .envelope-hint { color: #cfc3e8; }
 
+  body.night .reply-box h2 { color: #f0e6ff; }
+  body.night .reply-box textarea {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.2);
+    color: #f0e6ff;
+  }
+  body.night .reply-box textarea::placeholder { color: #a797cf; }
+
   /* ---------- Corazones pixelados flotando ENCIMA de todo ---------- */
   .flower-field {
     position: fixed;
@@ -145,7 +153,6 @@
     overflow: hidden;
   }
 
-  /* lineas de la solapa cerrada dibujadas con bordes triangulares */
   .envelope-body::before,
   .envelope-body::after {
     content: "";
@@ -221,7 +228,6 @@
     50% { opacity: 1; }
   }
 
-  /* Estado abierto */
   .envelope-screen.opening .envelope-flap {
     transform: rotateX(180deg);
   }
@@ -326,6 +332,78 @@
     border-radius: 12px;
   }
 
+  /* ---------- Casilla de respuesta ---------- */
+  .reply-box {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    text-align: left;
+  }
+
+  .reply-box h2 {
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: #4a3b3b;
+    margin: 0 0 14px;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .reply-box textarea {
+    width: 100%;
+    min-height: 100px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    background: rgba(255,255,255,0.6);
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: #4a3b3b;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  .reply-box textarea:focus {
+    border-color: #ff8fa3;
+  }
+
+  .reply-box button {
+    display: block;
+    margin: 14px auto 0;
+    padding: 10px 28px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff8fa3, #ff6f91);
+    color: white;
+    font-family: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(255, 111, 145, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .reply-box button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 111, 145, 0.45);
+  }
+
+  .reply-box button:disabled {
+    opacity: 0.6;
+    cursor: default;
+    transform: none;
+  }
+
+  .reply-thanks {
+    text-align: center;
+    font-style: italic;
+    color: #8a6f6f;
+    margin-top: 14px;
+  }
+
+  body.night .reply-box { border-top-color: rgba(255,255,255,0.12); }
+  body.night .reply-thanks { color: #cfc3e8; }
+
   /* ---------- Tablets ---------- */
   @media (max-width: 600px) {
     .card { padding: 36px 26px; border-radius: 20px; }
@@ -374,34 +452,40 @@
     <div class="heart">🤍</div>
     <h1>Perdón</h1>
     <p>
-      Sé que mis acciones te lastimaron, y eso pesa en mí. No busco excusas,
-      solo quiero que sepas que lo siento de verdad y que voy a esforzarme
-      por hacerlo mejor.
-      Sé que dijiste que no es lo mismo decir que hacer y eso me llevó a esto.
-      Tal vez yo no sea la mejor persona pero le puedo asegurar que me voy a esforzar por recuperar su confianza.
+      El mood de hoy es "Me importas tu", esta canción no refleja todo pero si podría verse algo de lo que hablo.
     </p>
     <p>
-      Gracias por leer hasta acá. Espero que esta canción diga
-      un poco de lo que las palabras no alcanzan a explicar (se le puede dar play :3).
+      Estoy muy apenado con usted, espero que esa situación no se vuelva a repetir.
+      De igual forma seguiré poniendo una canción por día.
     </p>
 
     <div class="spotify-wrapper">
-      <iframe
-        data-testid="embed-iframe"
-        style="border-radius:12px"
-        src="https://open.spotify.com/embed/track/2VhJ4nrPorAbySEgO4V0BS?utm_source=generator&si=f26857dd58274de5"
-        width="100%"
-        height="352"
-        frameborder="0"
-        allowfullscreen=""
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy">
+      <iframe data-testid="embed-iframe"
+      style="border-radius:12px"
+      src="https://open.spotify.com/embed/track/7qBT9qcbtkLqrfm9LiTNB4?utm_source=generator&si=5b2e91a857ff4234"
+      width="100%"
+      height="352"
+      frameborder="0"
+      allowfullscreen=""
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
       </iframe>
     </div>
 
     <p class="signature">Lo ideal sería que la escuches completa.</p>
     <p class="signature">Es con mucho cariño.</p>
     <p class="signature">La quiero mucho.</p>
+
+    <div class="reply-box">
+      <h2>Dime lo que piensas.</h2>
+      <form id="replyForm" action="https://formspree.io/f/xgojwqlo" method="POST">
+        <textarea name="mensaje" placeholder="Escribe lo que sientas..." required></textarea>
+        <button type="submit" id="replyButton">Enviar</button>
+      </form>
+      <p class="reply-thanks" id="replyThanks" style="display:none;">
+        Le agradezco si me llega a escribir, tenga por seguro que lo leeré.
+      </p>
+    </div>
   </div>
 
   <script>
@@ -445,6 +529,39 @@
         envelopeScreen.classList.add('hidden');
         letterCard.classList.add('reveal');
       }, 1100);
+    });
+
+    // ---------- Envío del formulario sin recargar la página ----------
+    const replyForm = document.getElementById('replyForm');
+    const replyButton = document.getElementById('replyButton');
+    const replyThanks = document.getElementById('replyThanks');
+
+    replyForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      replyButton.disabled = true;
+      replyButton.textContent = 'Enviando...';
+
+      try {
+        const formData = new FormData(replyForm);
+        const response = await fetch(replyForm.action, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          replyForm.style.display = 'none';
+          replyThanks.style.display = 'block';
+        } else {
+          replyButton.disabled = false;
+          replyButton.textContent = 'Enviar';
+          alert('Hubo un problema al enviar. Intenta de nuevo.');
+        }
+      } catch (err) {
+        replyButton.disabled = false;
+        replyButton.textContent = 'Enviar';
+        alert('Hubo un problema al enviar. Intenta de nuevo.');
+      }
     });
   </script>
 </body>
