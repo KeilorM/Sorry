@@ -34,7 +34,6 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* ---------- Modo noche ---------- */
   body.night {
     background: linear-gradient(135deg, #1b1530 0%, #2a1f4d 50%, #15102b 100%);
     background-size: 400% 400%;
@@ -48,6 +47,7 @@
   body.night h1 { color: #f0e6ff; }
   body.night p { color: #cfc3e8; }
   body.night .signature { color: #a797cf; }
+  body.night .day-badge { background: rgba(255,255,255,0.1); color: #e0d0ff; }
 
   body.night .pixel-heart {
     opacity: 0.85;
@@ -56,7 +56,6 @@
   }
 
   body.night .envelope-body { background: linear-gradient(160deg, #4a3970, #322455); }
-  body.night .envelope-flap { background: linear-gradient(160deg, #5c4789, #40316b); }
   body.night .envelope-hint { color: #cfc3e8; }
 
   body.night .reply-box h2 { color: #f0e6ff; }
@@ -66,14 +65,16 @@
     color: #f0e6ff;
   }
   body.night .reply-box textarea::placeholder { color: #a797cf; }
+  body.night .reply-box { border-top-color: rgba(255,255,255,0.12); }
+  body.night .reply-thanks { color: #cfc3e8; }
 
-  /* ---------- Corazones pixelados flotando ENCIMA de todo ---------- */
+  /* ---------- Corazones ---------- */
   .flower-field {
     position: fixed;
     inset: 0;
     pointer-events: none;
     overflow: hidden;
-    z-index: 5; /* por encima de la card */
+    z-index: 5;
   }
 
   .pixel-heart {
@@ -85,7 +86,6 @@
     animation-iteration-count: infinite;
     opacity: 0.65;
     mix-blend-mode: multiply;
-    transition: opacity 1.5s ease;
   }
 
   .pixel-heart::before {
@@ -117,6 +117,22 @@
     50% { transform: translateY(-50vh) translateX(20px) rotate(15deg); }
     92% { opacity: 0.65; }
     100% { transform: translateY(-105vh) translateX(-10px) rotate(-15deg); opacity: 0; }
+  }
+
+  /* ---------- Badge día ---------- */
+  .day-badge {
+    display: inline-block;
+    background: rgba(255, 111, 145, 0.12);
+    color: #c0506a;
+    border-radius: 999px;
+    padding: 4px 16px;
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-style: normal;
+    font-family: 'Georgia', serif;
+    transition: background 1.5s ease, color 1.5s ease;
   }
 
   /* ---------- Sobre ---------- */
@@ -153,8 +169,7 @@
     overflow: hidden;
   }
 
-  .envelope-body::before,
-  .envelope-body::after {
+  .envelope-body::before, .envelope-body::after {
     content: "";
     position: absolute;
     top: 0;
@@ -162,21 +177,13 @@
     height: 0;
     border-top: 85px solid #ffd3dd;
   }
-  .envelope-body::before {
-    left: 0;
-    border-left: 130px solid transparent;
-  }
-  .envelope-body::after {
-    right: 0;
-    border-right: 130px solid transparent;
-  }
+  .envelope-body::before { left: 0; border-left: 130px solid transparent; }
+  .envelope-body::after  { right: 0; border-right: 130px solid transparent; }
 
   .envelope-flap {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
+    top: 0; left: 0;
+    width: 0; height: 0;
     border-left: 130px solid transparent;
     border-right: 130px solid transparent;
     border-top: 95px solid #ffb6c8;
@@ -188,11 +195,9 @@
 
   .seal {
     position: absolute;
-    top: 65px;
-    left: 50%;
+    top: 65px; left: 50%;
     transform: translate(-50%, 0);
-    width: 36px;
-    height: 36px;
+    width: 36px; height: 36px;
     z-index: 4;
     image-rendering: pixelated;
     transition: opacity 0.4s ease, transform 0.4s ease;
@@ -201,8 +206,7 @@
   .seal::before {
     content: "";
     display: block;
-    width: 4px;
-    height: 4px;
+    width: 4px; height: 4px;
     background: transparent;
     transform: scale(1.4);
     box-shadow:
@@ -228,32 +232,19 @@
     50% { opacity: 1; }
   }
 
-  .envelope-screen.opening .envelope-flap {
-    transform: rotateX(180deg);
-  }
-  .envelope-screen.opening .seal {
-    opacity: 0;
-    transform: translate(-50%, -10px) scale(0.6);
-  }
-  .envelope-screen.opening .envelope {
-    animation: none;
-  }
-  .envelope-screen.opening .envelope-body {
-    animation: envShrink 0.6s ease 0.5s forwards;
-  }
-  .envelope-screen.opening .envelope-hint {
-    opacity: 0;
-  }
+  .envelope-screen.opening .envelope-flap { transform: rotateX(180deg); }
+  .envelope-screen.opening .seal { opacity: 0; transform: translate(-50%, -10px) scale(0.6); }
+  .envelope-screen.opening .envelope { animation: none; }
+  .envelope-screen.opening .envelope-body { animation: envShrink 0.6s ease 0.5s forwards; }
+  .envelope-screen.opening .envelope-hint { opacity: 0; }
 
   @keyframes envShrink {
     to { transform: translateY(40px) scale(0.85); opacity: 0; }
   }
 
-  .envelope-screen.hidden {
-    display: none;
-  }
+  .envelope-screen.hidden { display: none; }
 
-  /* ---------- Carta / Tarjeta ---------- */
+  /* ---------- Carta ---------- */
   .card {
     position: relative;
     z-index: 1;
@@ -266,10 +257,8 @@
     padding: 48px 40px;
     text-align: center;
     transition: background 1.5s ease, box-shadow 1.5s ease;
-
     display: none;
     opacity: 0;
-    transform: translateY(60px) scale(0.96);
   }
 
   .card.reveal {
@@ -279,7 +268,7 @@
 
   @keyframes letterRise {
     from { opacity: 0; transform: translateY(60px) scale(0.96); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   .heart {
@@ -311,7 +300,7 @@
   }
 
   .signature {
-    margin-top: 24px;
+    margin-top: 16px;
     font-style: italic;
     color: #9a8a8a;
     font-size: 0.95rem;
@@ -341,7 +330,7 @@
   }
 
   .reply-box h2 {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 400;
     color: #4a3b3b;
     margin: 0 0 14px;
@@ -361,12 +350,10 @@
     color: #4a3b3b;
     resize: vertical;
     outline: none;
-    transition: border-color 0.3s ease, background 0.3s ease;
+    transition: border-color 0.3s ease;
   }
 
-  .reply-box textarea:focus {
-    border-color: #ff8fa3;
-  }
+  .reply-box textarea:focus { border-color: #ff8fa3; }
 
   .reply-box button {
     display: block;
@@ -379,20 +366,12 @@
     font-family: inherit;
     font-size: 0.95rem;
     cursor: pointer;
-    box-shadow: 0 6px 16px rgba(255, 111, 145, 0.35);
+    box-shadow: 0 6px 16px rgba(255,111,145,0.35);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .reply-box button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 111, 145, 0.45);
-  }
-
-  .reply-box button:disabled {
-    opacity: 0.6;
-    cursor: default;
-    transform: none;
-  }
+  .reply-box button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,111,145,0.45); }
+  .reply-box button:disabled { opacity: 0.6; cursor: default; transform: none; }
 
   .reply-thanks {
     text-align: center;
@@ -401,10 +380,15 @@
     margin-top: 14px;
   }
 
-  body.night .reply-box { border-top-color: rgba(255,255,255,0.12); }
-  body.night .reply-thanks { color: #cfc3e8; }
+  /* ---------- Sin canción hoy ---------- */
+  .no-song {
+    color: #9a8a8a;
+    font-style: italic;
+    margin-top: 24px;
+    font-size: 0.95rem;
+  }
 
-  /* ---------- Tablets ---------- */
+  /* ---------- Responsive ---------- */
   @media (max-width: 600px) {
     .card { padding: 36px 26px; border-radius: 20px; }
     h1 { font-size: 1.6rem; }
@@ -414,11 +398,10 @@
     .envelope { width: 220px; height: 145px; }
     .envelope-body::before, .envelope-body::after { border-top: 72px solid #ffd3dd; }
     .envelope-body::before { border-left: 110px solid transparent; }
-    .envelope-body::after { border-right: 110px solid transparent; }
+    .envelope-body::after  { border-right: 110px solid transparent; }
     .envelope-flap { border-left: 110px solid transparent; border-right: 110px solid transparent; border-top: 80px solid #ffb6c8; }
   }
 
-  /* ---------- Celulares chicos ---------- */
   @media (max-width: 380px) {
     body { padding: 12px; }
     .card { padding: 28px 18px; border-radius: 16px; }
@@ -429,7 +412,7 @@
     .envelope { width: 190px; height: 125px; }
     .envelope-body::before, .envelope-body::after { border-top: 62px solid #ffd3dd; }
     .envelope-body::before { border-left: 95px solid transparent; }
-    .envelope-body::after { border-right: 95px solid transparent; }
+    .envelope-body::after  { border-right: 95px solid transparent; }
     .envelope-flap { border-left: 95px solid transparent; border-right: 95px solid transparent; border-top: 68px solid #ffb6c8; }
     .seal { top: 50px; width: 30px; height: 30px; }
   }
@@ -450,89 +433,171 @@
 
   <div class="card" id="letterCard">
     <div class="heart">🤍</div>
-    <h1>Im so scared</h1>
-    <p>
-      El mood de hoy es "Me importas tu", esta canción no refleja todo pero si podría verse algo de lo que hablo.
-    </p>
-    <p>
-      Estoy muy apenado con usted, espero que esa situación no se vuelva a repetir.
-      De igual forma seguiré poniendo una canción por día.
-    </p>
+    <span class="day-badge" id="dayBadge">Día 1</span>
+    <h1 id="songTitle">…</h1>
+    <p id="songMood"></p>
+    <p id="songExtra"></p>
 
-    <div class="spotify-wrapper">
-      <iframe data-testid="embed-iframe"
-      style="border-radius:12px"
-      src="https://open.spotify.com/embed/track/7qBT9qcbtkLqrfm9LiTNB4?utm_source=generator&si=5b2e91a857ff4234"
-      width="100%"
-      height="352"
-      frameborder="0"
-      allowfullscreen=""
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy">
+    <div class="spotify-wrapper" id="spotifyWrapper">
+      <iframe id="spotifyIframe"
+        style="border-radius:12px"
+        src=""
+        width="100%"
+        height="352"
+        frameborder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
       </iframe>
     </div>
 
-    <p class="signature">Lo ideal sería que la escuches completa.</p>
-    <p class="signature">Es con mucho cariño.</p>
-    <p class="signature">La quiero mucho.</p>
+    <div id="noSongMsg" class="no-song" style="display:none;">
+      Todavía no hay canción para hoy, volvé más tarde 🤍
+    </div>
+
+    <p class="signature" id="sig1"></p>
+    <p class="signature" id="sig2"></p>
+    <p class="signature" id="sig3"></p>
 
     <div class="reply-box">
-      <h2>Dime lo que piensas.</h2>
+      <h2 id="replyQuestion">¿Qué opinás?</h2>
       <form id="replyForm" action="https://formspree.io/f/xgojwqlo" method="POST">
+        <input type="hidden" name="dia" id="hiddenDia" value="" />
         <textarea name="mensaje" placeholder="Escribe lo que sientas..." required></textarea>
         <button type="submit" id="replyButton">Enviar</button>
       </form>
       <p class="reply-thanks" id="replyThanks" style="display:none;">
-        Le agradezco si me llega a escribir, tenga por seguro que lo leeré.
+        Le agradezco si me llega a escribir, tenga por seguro que lo leeré 🤍
       </p>
     </div>
   </div>
 
   <script>
-    // ---------- Modo día / noche según la hora local del dispositivo ----------
-    const hour = new Date().getHours();
-    const isNight = hour >= 19 || hour < 7;
-    if (isNight) {
-      document.body.classList.add('night');
+    // ═══════════════════════════════════════════════════════
+    //  LISTA DE CANCIONES — solo editá esto cada día
+    //  Cómo conseguir el trackId:
+    //    Spotify → "..." → Compartir → Copiar enlace
+    //    el ID es la parte después de /track/ y antes del "?"
+    // ═══════════════════════════════════════════════════════
+    const INICIO = "2026-06-20"; // Día 1 — no cambies esto
+
+    const canciones = [
+      {
+        fecha:   "2026-06-20",
+        trackId: "7qBT9qcbtkLqrfm9LiTNB4",
+        titulo:  "Perdón",
+        mood:    "El mood de hoy es \"Me importas tú\", esta canción no refleja todo pero sí podría verse algo de lo que hablo.",
+        extra:   "Estoy muy apenado con usted, espero que esa situación no se vuelva a repetir. De igual forma seguiré poniendo una canción por día.",
+        sig1:    "Lo ideal sería que la escuches completa.",
+        sig2:    "Es con mucho cariño.",
+        sig3:    "La quiero mucho.",
+        pregunta: "¿Cuál es su mood de hoy?"
+      },
+      {
+        fecha:   "2026-06-21",
+        trackId: "2VhJ4nrPorAbySEgO4V0BS",
+        titulo:  "idk",
+        mood:    "El mood de hoy es \"¿Somos lo que somos o solo somos lo que queremos ser?\"",
+        extra:   "Esta canción podría ser una de las más personales que he escuchado y que le mostraré a alguien. Me siento muy identificado con varias de las partes. Espero que sea de su agrado.",
+        sig1:    "Lo ideal sería que la escuches completa, ya que es un poco compleja.",
+        sig2:    "La siento un poco tensa, espero que pronto podamos solucionar eso y seguir adelante.",
+        sig3:    "La aprecio como no tiene idea.",
+        pregunta: "¿Qué le dijo su espejo hoy?"
+      },
+      // ── Día 4 en adelante: copiá el bloque de arriba y pegalo acá ──
+      // {
+      //   fecha:   "2026-06-23",
+      //   trackId: "PEGA_EL_ID_DE_SPOTIFY",
+      //   titulo:  "Título de la carta",
+      //   mood:    "El mood de hoy es ...",
+      //   extra:   "Mensaje adicional si querés.",
+      //   sig1:    "Firma 1",
+      //   sig2:    "Firma 2",
+      //   sig3:    "Firma 3",
+      //   pregunta: "¿Qué opinás de esta canción?"
+      // },
+    ];
+
+    // ═══════════════════════════════════════════════════════
+    //  NO TOQUES NADA DE ACÁ PARA ABAJO
+    // ═══════════════════════════════════════════════════════
+
+    // Modo noche siempre activo
+    document.body.classList.add('night');
+
+    // Calcular día actual
+    const hoy = new Date().toISOString().slice(0, 10);
+    const inicio = new Date(INICIO);
+    const ahora  = new Date(hoy);
+    const diffDias = Math.floor((ahora - inicio) / 86400000) + 1;
+    document.getElementById('dayBadge').textContent = `Día ${diffDias}`;
+
+    // Buscar la canción de hoy
+    const cancionHoy = canciones.find(c => c.fecha === hoy);
+
+    if (cancionHoy) {
+      document.getElementById('songTitle').textContent   = cancionHoy.titulo;
+      document.getElementById('songMood').textContent    = cancionHoy.mood;
+      document.getElementById('songExtra').textContent   = cancionHoy.extra || '';
+      document.getElementById('sig1').textContent        = cancionHoy.sig1 || '';
+      document.getElementById('sig2').textContent        = cancionHoy.sig2 || '';
+      document.getElementById('sig3').textContent        = cancionHoy.sig3 || '';
+      document.getElementById('replyQuestion').textContent = cancionHoy.pregunta || '¿Qué opinás?';
+      document.getElementById('hiddenDia').value         = `Día ${diffDias} — ${hoy}`;
+      document.getElementById('spotifyIframe').src =
+        `https://open.spotify.com/embed/track/${cancionHoy.trackId}?utm_source=generator&theme=0`;
+    } else {
+      document.getElementById('spotifyWrapper').style.display = 'none';
+      document.getElementById('noSongMsg').style.display = 'block';
+      document.getElementById('songTitle').textContent = '🤍';
+      document.getElementById('songMood').textContent  = '';
     }
 
-    // ---------- Corazones pixelados flotantes ----------
-    const field = document.getElementById('flowerField');
-    const styles = ['s1', 's2', 's3', 's4', 's5', 's6'];
-    const totalHearts = window.innerWidth < 500 ? 16 : 24;
+    // Corazones flotantes
+    const field  = document.getElementById('flowerField');
+    const estilos = ['s1','s2','s3','s4','s5','s6'];
+    const total  = window.innerWidth < 500 ? 16 : 24;
 
-    for (let i = 0; i < totalHearts; i++) {
-      const heart = document.createElement('div');
-      const styleClass = styles[Math.floor(Math.random() * styles.length)];
-      heart.className = 'pixel-heart ' + styleClass;
-
-      const left = Math.random() * 100;
-      const duration = 8 + Math.random() * 9;
-      const delay = Math.random() * 15;
-
-      heart.style.left = left + 'vw';
-      heart.style.animationDuration = duration + 's';
-      heart.style.animationDelay = '-' + delay + 's';
-
-      field.appendChild(heart);
+    for (let i = 0; i < total; i++) {
+      const h = document.createElement('div');
+      h.className = 'pixel-heart ' + estilos[Math.floor(Math.random() * estilos.length)];
+      h.style.left              = (Math.random() * 100) + 'vw';
+      h.style.animationDuration = (8 + Math.random() * 9) + 's';
+      h.style.animationDelay    = '-' + (Math.random() * 15) + 's';
+      field.appendChild(h);
     }
 
-    // ---------- Apertura del sobre ----------
-    const envelopeScreen = document.getElementById('envelopeScreen');
+    // Apertura del sobre
+    const envScreen  = document.getElementById('envelopeScreen');
     const letterCard = document.getElementById('letterCard');
 
-    envelopeScreen.addEventListener('click', () => {
-      if (envelopeScreen.classList.contains('opening')) return;
-      envelopeScreen.classList.add('opening');
-
+    envScreen.addEventListener('click', () => {
+      if (envScreen.classList.contains('opening')) return;
+      envScreen.classList.add('opening');
       setTimeout(() => {
-        envelopeScreen.classList.add('hidden');
+        envScreen.classList.add('hidden');
         letterCard.classList.add('reveal');
+
+        // ── Notificación silenciosa de apertura ──
+        const modo = document.body.classList.contains('night') ? 'Noche 🌙' : 'Día ☀️';
+        const hora = new Date().toLocaleTimeString('es-CR');
+        fetch('https://formspree.io/f/xgojwqlo', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            _subject: `💌 Abrió la página — Día ${diffDias}`,
+            evento:   'apertura',
+            dia:      `Día ${diffDias}`,
+            hora:     hora,
+            modo:     modo,
+            mensaje:  `La página fue abierta el Día ${diffDias} a las ${hora} (modo ${modo})`
+          })
+        }).catch(() => {}); // silencioso, no importa si falla
       }, 1100);
     });
 
-    // ---------- Envío del formulario sin recargar la página ----------
-    const replyForm = document.getElementById('replyForm');
+    // Envío del formulario
+    const replyForm   = document.getElementById('replyForm');
     const replyButton = document.getElementById('replyButton');
     const replyThanks = document.getElementById('replyThanks');
 
@@ -542,22 +607,21 @@
       replyButton.textContent = 'Enviando...';
 
       try {
-        const formData = new FormData(replyForm);
-        const response = await fetch(replyForm.action, {
-          method: 'POST',
-          body: formData,
+        const res = await fetch(replyForm.action, {
+          method:  'POST',
+          body:    new FormData(replyForm),
           headers: { 'Accept': 'application/json' }
         });
 
-        if (response.ok) {
-          replyForm.style.display = 'none';
+        if (res.ok) {
+          replyForm.style.display   = 'none';
           replyThanks.style.display = 'block';
         } else {
           replyButton.disabled = false;
           replyButton.textContent = 'Enviar';
           alert('Hubo un problema al enviar. Intenta de nuevo.');
         }
-      } catch (err) {
+      } catch {
         replyButton.disabled = false;
         replyButton.textContent = 'Enviar';
         alert('Hubo un problema al enviar. Intenta de nuevo.');
