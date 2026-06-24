@@ -179,99 +179,218 @@
 
   .envelope {
     position: relative;
-    width: 260px;
-    height: 170px;
-    animation: envFloat 3s ease-in-out infinite;
+    width: 300px;
+    height: 196px;
+    animation: envFloat 4s ease-in-out infinite;
+    perspective: 600px;
   }
 
   @keyframes envFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50%       { transform: translateY(-12px) rotate(1deg); }
   }
 
+  /* Sombra externa que oscila */
+  .envelope-shadow {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 18px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.28) 0%, transparent 70%);
+    animation: shadowPulse 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes shadowPulse {
+    0%, 100% { transform: translateX(-50%) scaleX(1);   opacity: 0.7; }
+    50%       { transform: translateX(-50%) scaleX(0.8); opacity: 0.35; }
+  }
+
+  /* Cuerpo principal */
   .envelope-body {
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg, #fff5f7, #ffe3ea);
-    border-radius: 10px;
-    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+    background: linear-gradient(160deg, #3d1f5c 0%, #2a1245 60%, #1e0d38 100%);
+    border-radius: 12px;
+    box-shadow:
+      0 2px 0 rgba(255,255,255,0.06) inset,
+      0 -2px 0 rgba(0,0,0,0.3) inset,
+      0 24px 48px rgba(0,0,0,0.55),
+      0 4px 12px rgba(160,100,255,0.15);
     overflow: hidden;
   }
 
-  .envelope-body::before, .envelope-body::after {
+  /* Líneas decorativas sutiles en el cuerpo */
+  .envelope-body::after {
     content: "";
     position: absolute;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-top: 85px solid #ffd3dd;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 18px,
+        rgba(255,255,255,0.025) 18px,
+        rgba(255,255,255,0.025) 19px
+      );
+    border-radius: 12px;
   }
-  .envelope-body::before { left: 0; border-left: 130px solid transparent; }
-  .envelope-body::after  { right: 0; border-right: 130px solid transparent; }
 
+  /* Triángulos laterales inferiores (V del fondo) */
+  .envelope-bottom-left,
+  .envelope-bottom-right {
+    position: absolute;
+    bottom: 0;
+    width: 0; height: 0;
+    z-index: 1;
+  }
+  .envelope-bottom-left {
+    left: 0;
+    border-bottom: 98px solid #4a2870;
+    border-right: 150px solid transparent;
+  }
+  .envelope-bottom-right {
+    right: 0;
+    border-bottom: 98px solid #4a2870;
+    border-left: 150px solid transparent;
+  }
+
+  /* Solapa superior (flap) */
   .envelope-flap {
     position: absolute;
-    top: 0; left: 0;
-    width: 0; height: 0;
-    border-left: 130px solid transparent;
-    border-right: 130px solid transparent;
-    border-top: 95px solid #ffb6c8;
+    top: 0; left: 0; right: 0;
+    height: 0;
+    width: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 108px solid #5c3490;
     transform-origin: top center;
-    transition: transform 0.7s cubic-bezier(.6,-0.28,.74,.05);
-    z-index: 3;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.12));
+    transition: transform 0.75s cubic-bezier(.6,-0.3,.74,.05);
+    z-index: 4;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.4));
   }
 
+  /* Borde iluminado en la solapa */
+  .envelope-flap::before {
+    content: "";
+    position: absolute;
+    top: -108px;
+    left: -150px;
+    width: 0; height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 4px solid rgba(200,150,255,0.25);
+  }
+
+  /* Sello de lacre */
   .seal {
     position: absolute;
-    top: 65px; left: 50%;
+    top: 72px;
+    left: 50%;
     transform: translate(-50%, 0);
-    width: 36px; height: 36px;
-    z-index: 4;
-    image-rendering: pixelated;
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    z-index: 5;
+    transition: opacity 0.4s ease, transform 0.45s cubic-bezier(.4,0,.2,1);
+    width: 48px;
+    height: 48px;
   }
 
-  .seal::before {
-    content: "";
-    display: block;
-    width: 4px; height: 4px;
-    background: transparent;
-    transform: scale(1.4);
+  .seal-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 36%, #c084fc, #7c3aed 55%, #4c1d95);
     box-shadow:
-      4px 0px 0 0 #ff4d6d,  8px 0px 0 0 #ff4d6d,
-      16px 0px 0 0 #ff4d6d, 20px 0px 0 0 #ff4d6d,
-      0px 4px 0 0 #ff4d6d,  4px 4px 0 0 #ff4d6d,  8px 4px 0 0 #ff4d6d, 12px 4px 0 0 #ff4d6d, 16px 4px 0 0 #ff4d6d, 20px 4px 0 0 #ff4d6d, 24px 4px 0 0 #ff4d6d,
-      0px 8px 0 0 #ff4d6d,  4px 8px 0 0 #ff4d6d,  8px 8px 0 0 #ff4d6d, 12px 8px 0 0 #ff4d6d, 16px 8px 0 0 #ff4d6d, 20px 8px 0 0 #ff4d6d, 24px 8px 0 0 #ff4d6d,
-      4px 12px 0 0 #ff4d6d, 8px 12px 0 0 #ff4d6d, 12px 12px 0 0 #ff4d6d, 16px 12px 0 0 #ff4d6d, 20px 12px 0 0 #ff4d6d,
-      8px 16px 0 0 #ff4d6d, 12px 16px 0 0 #ff4d6d, 16px 16px 0 0 #ff4d6d,
-      12px 20px 0 0 #ff4d6d;
+      0 0 0 2px rgba(255,255,255,0.15),
+      0 0 16px rgba(167,139,250,0.6),
+      inset 0 1px 2px rgba(255,255,255,0.25),
+      inset 0 -1px 2px rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: sealGlow 2.5s ease-in-out infinite;
   }
 
+  @keyframes sealGlow {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(255,255,255,0.15), 0 0 16px rgba(167,139,250,0.6), inset 0 1px 2px rgba(255,255,255,0.25), inset 0 -1px 2px rgba(0,0,0,0.35); }
+    50%       { box-shadow: 0 0 0 2px rgba(255,255,255,0.22), 0 0 28px rgba(167,139,250,0.9), inset 0 1px 2px rgba(255,255,255,0.3),  inset 0 -1px 2px rgba(0,0,0,0.35); }
+  }
+
+  .seal-heart {
+    font-size: 20px;
+    line-height: 1;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+  }
+
+  /* Bordes del sobre (línea del pliegue central) */
+  .envelope-crease {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 60%, transparent 100%);
+    z-index: 2;
+  }
+
+  /* Texto hint */
   .envelope-hint {
-    margin-top: 22px;
-    font-size: 0.95rem;
-    color: #8a6f6f;
+    margin-top: 28px;
+    font-size: 0.9rem;
+    color: #b8a0d8;
     font-style: italic;
-    animation: hintPulse 1.8s ease-in-out infinite;
+    letter-spacing: 0.3px;
+    animation: hintPulse 2s ease-in-out infinite;
   }
 
   @keyframes hintPulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
+    0%, 100% { opacity: 0.5; }
+    50%       { opacity: 1; }
   }
 
-  .envelope-screen.opening .envelope-flap { transform: rotateX(180deg); }
-  .envelope-screen.opening .seal { opacity: 0; transform: translate(-50%, -10px) scale(0.6); }
-  .envelope-screen.opening .envelope { animation: none; }
-  .envelope-screen.opening .envelope-body { animation: envShrink 0.6s ease 0.5s forwards; }
-  .envelope-screen.opening .envelope-hint { opacity: 0; }
+  /* Estrellas decorativas alrededor del sobre */
+  .env-star {
+    position: absolute;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: rgba(200,160,255,0.7);
+    animation: twinkle var(--d, 2s) ease-in-out infinite var(--delay, 0s);
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50%       { opacity: 1;   transform: scale(1.3); }
+  }
+
+  /* Estados de apertura */
+  .envelope-screen.opening .envelope-flap  { transform: rotateX(180deg); }
+  .envelope-screen.opening .seal           { opacity: 0; transform: translate(-50%, -14px) scale(0.5); }
+  .envelope-screen.opening .envelope       { animation: none; }
+  .envelope-screen.opening .envelope-body  { animation: envShrink 0.65s ease 0.55s forwards; }
+  .envelope-screen.opening .envelope-shadow { animation: none; opacity: 0; }
+  .envelope-screen.opening .envelope-hint  { opacity: 0; transition: opacity 0.3s; }
 
   @keyframes envShrink {
-    to { transform: translateY(40px) scale(0.85); opacity: 0; }
+    to { transform: translateY(50px) scale(0.82); opacity: 0; }
   }
 
   .envelope-screen.hidden { display: none; }
+
+  /* Responsive sobre */
+  @media (max-width: 600px) {
+    .envelope { width: 260px; height: 170px; }
+    .envelope-flap { border-left-width: 130px; border-right-width: 130px; border-top-width: 94px; }
+    .envelope-bottom-left  { border-bottom-width: 85px; border-right-width: 130px; }
+    .envelope-bottom-right { border-bottom-width: 85px; border-left-width:  130px; }
+    .seal { top: 62px; }
+  }
+  @media (max-width: 380px) {
+    .envelope { width: 220px; height: 144px; }
+    .envelope-flap { border-left-width: 110px; border-right-width: 110px; border-top-width: 80px; }
+    .envelope-bottom-left  { border-bottom-width: 72px; border-right-width: 110px; }
+    .envelope-bottom-right { border-bottom-width: 72px; border-left-width:  110px; }
+    .seal { top: 52px; width: 40px; height: 40px; }
+    .seal-circle { width: 40px; height: 40px; }
+    .seal-heart { font-size: 16px; }
+  }
 
   /* ---------- Carta ---------- */
   .card {
@@ -607,11 +726,6 @@
     p { font-size: 0.98rem; line-height: 1.6; }
     .heart { font-size: 2.1rem; }
     .spotify-wrapper iframe { height: 232px; }
-    .envelope { width: 220px; height: 145px; }
-    .envelope-body::before, .envelope-body::after { border-top: 72px solid #ffd3dd; }
-    .envelope-body::before { border-left: 110px solid transparent; }
-    .envelope-body::after  { border-right: 110px solid transparent; }
-    .envelope-flap { border-left: 110px solid transparent; border-right: 110px solid transparent; border-top: 80px solid #ffb6c8; }
   }
 
   @media (max-width: 380px) {
@@ -621,12 +735,6 @@
     p { font-size: 0.92rem; }
     .spotify-wrapper { margin-top: 22px; }
     .spotify-wrapper iframe { height: 152px; }
-    .envelope { width: 190px; height: 125px; }
-    .envelope-body::before, .envelope-body::after { border-top: 62px solid #ffd3dd; }
-    .envelope-body::before { border-left: 95px solid transparent; }
-    .envelope-body::after  { border-right: 95px solid transparent; }
-    .envelope-flap { border-left: 95px solid transparent; border-right: 95px solid transparent; border-top: 68px solid #ffb6c8; }
-    .seal { top: 50px; width: 30px; height: 30px; }
   }
 </style>
 </head>
@@ -635,12 +743,21 @@
   <div class="flower-field" id="flowerField"></div>
 
   <div class="envelope-screen" id="envelopeScreen">
-    <div class="envelope">
-      <div class="envelope-body"></div>
-      <div class="seal"></div>
+    <div class="envelope" id="envelopeEl">
+      <div class="envelope-shadow"></div>
+      <div class="envelope-body">
+        <div class="envelope-crease"></div>
+        <div class="envelope-bottom-left"></div>
+        <div class="envelope-bottom-right"></div>
+      </div>
+      <div class="seal">
+        <div class="seal-circle">
+          <span class="seal-heart">🤍</span>
+        </div>
+      </div>
       <div class="envelope-flap"></div>
     </div>
-    <div class="envelope-hint">Toca el sobre para abrirlo</div>
+    <div class="envelope-hint">Toca el sobre para abrirlo ✨</div>
   </div>
 
   <div class="card" id="letterCard">
@@ -733,7 +850,7 @@
           </button>
         </form>
         <p class="reply-thanks" id="replyThanksSong" style="display:none;">
-          La escucharé 🤍 Eso téngalo por seguro.
+          Qué bonito gesto responder con una canción 🤍 La escucharé.
         </p>
       </div>
     </div>
@@ -801,17 +918,6 @@
         sig3:    "La aprecio mucho, espero que le guste.",
         pregunta: "¿Podría ser?"
       },
-      {
-        fecha:   "2026-06-25",
-        trackId: "24dVPDRHuJMzaJpc8ItjDy",
-        titulo:  "AIRE",
-        mood:    "Me falta el aire.",
-        extra:   "Esta es una de las sensaciones que tengo cada vez que estoy mal, supongo que es solo tristeza.",
-        sig1:    "También podría ser simple debilidad y/o ganas de sentirme así.",
-        sig2:    "A veces nos saboteamos a nosotros mismos.",
-        sig3:    "La aprecio mucho.",
-        pregunta: "¿Sientes que alguna vez te ha faltado el aire de esa forma?"
-      },
     ];
 
     // ═══════════════════════════════════════════════════════
@@ -860,6 +966,23 @@
       h.style.animationDelay    = '-' + (Math.random() * 15) + 's';
       field.appendChild(h);
     }
+
+    // Estrellitas alrededor del sobre
+    const envEl = document.getElementById('envelopeEl');
+    const starPositions = [
+      { top: '-18px', left: '10px' },  { top: '-22px', left: '50%' },  { top: '-14px', right: '14px' },
+      { top: '50%',  left: '-20px' },  { top: '50%',   right: '-20px' },
+      { bottom: '-10px', left: '20px' }, { bottom: '-10px', right: '20px' },
+    ];
+    starPositions.forEach((pos, i) => {
+      const s = document.createElement('div');
+      s.className = 'env-star';
+      Object.assign(s.style, pos);
+      s.style.setProperty('--d', (1.8 + Math.random() * 1.4) + 's');
+      s.style.setProperty('--delay', (Math.random() * 1.5) + 's');
+      s.style.width = s.style.height = (Math.random() > 0.5 ? '3px' : '5px');
+      envEl.appendChild(s);
+    });
 
     // Apertura del sobre
     const envScreen  = document.getElementById('envelopeScreen');
