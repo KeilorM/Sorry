@@ -59,14 +59,43 @@
   body.night .envelope-hint { color: #cfc3e8; }
 
   body.night .reply-box h2 { color: #f0e6ff; }
-  body.night .reply-box textarea {
+  body.night .reply-box textarea,
+  body.night .reply-box input[type="text"] {
     background: rgba(255,255,255,0.06);
     border-color: rgba(255,255,255,0.2);
     color: #f0e6ff;
   }
-  body.night .reply-box textarea::placeholder { color: #a797cf; }
+  body.night .reply-box textarea::placeholder,
+  body.night .reply-box input[type="text"]::placeholder { color: #a797cf; }
   body.night .reply-box { border-top-color: rgba(255,255,255,0.12); }
   body.night .reply-thanks { color: #cfc3e8; }
+
+  body.night .reply-tabs button {
+    background: rgba(255,255,255,0.07);
+    color: #cfc3e8;
+    border-color: rgba(255,255,255,0.15);
+  }
+  body.night .reply-tabs button.active {
+    background: linear-gradient(135deg, #7b5ea7, #5c3d8f);
+    color: #fff;
+    border-color: transparent;
+  }
+  body.night .yt-preview {
+    background: rgba(0,0,0,0.35);
+    border-color: rgba(255,255,255,0.1);
+  }
+  body.night .yt-search-hint { color: #a797cf; }
+  body.night .yt-result-item {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.1);
+    color: #f0e6ff;
+  }
+  body.night .yt-result-item:hover { background: rgba(255,255,255,0.13); }
+  body.night .yt-results-list { border-color: rgba(255,255,255,0.1); }
+  body.night .search-field-wrap input { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); color: #f0e6ff; }
+  body.night .search-field-wrap input::placeholder { color: #a797cf; }
+  body.night .search-btn { background: rgba(255,255,255,0.1); color: #e0d0ff; }
+  body.night .search-btn:hover { background: rgba(255,255,255,0.18); }
 
   /* ---------- Corazones ---------- */
   .flower-field {
@@ -321,7 +350,7 @@
     border-radius: 12px;
   }
 
-  /* ---------- Casilla de respuesta ---------- */
+  /* ---------- Reply box ---------- */
   .reply-box {
     margin-top: 36px;
     padding-top: 28px;
@@ -333,14 +362,49 @@
     font-size: 1.1rem;
     font-weight: 400;
     color: #4a3b3b;
-    margin: 0 0 14px;
+    margin: 0 0 16px;
     text-align: center;
     font-style: italic;
   }
 
-  .reply-box textarea {
+  /* ---------- Tabs ---------- */
+  .reply-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .reply-tabs button {
+    flex: 1;
+    padding: 9px 12px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    background: rgba(255,255,255,0.5);
+    color: #6b5a5a;
+    font-family: inherit;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .reply-tabs button.active {
+    background: linear-gradient(135deg, #ff8fa3, #ff6f91);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(255,111,145,0.35);
+  }
+
+  /* ---------- Panel texto ---------- */
+  .reply-panel { display: none; }
+  .reply-panel.active { display: block; }
+
+  .reply-box textarea,
+  .reply-box input[type="text"] {
     width: 100%;
-    min-height: 100px;
     border-radius: 12px;
     border: 1.5px solid rgba(0,0,0,0.12);
     background: rgba(255,255,255,0.6);
@@ -353,9 +417,12 @@
     transition: border-color 0.3s ease;
   }
 
-  .reply-box textarea:focus { border-color: #ff8fa3; }
+  .reply-box textarea { min-height: 100px; }
 
-  .reply-box button {
+  .reply-box textarea:focus,
+  .reply-box input[type="text"]:focus { border-color: #ff8fa3; }
+
+  .reply-box button.send-btn {
     display: block;
     margin: 14px auto 0;
     padding: 10px 28px;
@@ -370,8 +437,153 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .reply-box button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,111,145,0.45); }
-  .reply-box button:disabled { opacity: 0.6; cursor: default; transform: none; }
+  .reply-box button.send-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,111,145,0.45); }
+  .reply-box button.send-btn:disabled { opacity: 0.6; cursor: default; transform: none; }
+
+  /* ---------- Panel canción ---------- */
+  .search-field-wrap {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .search-field-wrap input {
+    flex: 1;
+    min-width: 0;
+    resize: none;
+  }
+
+  .search-btn {
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    background: rgba(255,255,255,0.6);
+    color: #6b5a5a;
+    font-family: inherit;
+    font-size: 0.88rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .search-btn:hover { background: rgba(255,255,255,0.9); }
+  .search-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .yt-search-hint {
+    font-size: 0.82rem;
+    color: #9a8a8a;
+    font-style: italic;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  /* Results list */
+  .yt-results-list {
+    border-radius: 12px;
+    border: 1.5px solid rgba(0,0,0,0.08);
+    overflow: hidden;
+    margin-bottom: 14px;
+    display: none;
+  }
+
+  .yt-result-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.5);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    transition: background 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .yt-result-item:last-child { border-bottom: none; }
+  .yt-result-item:hover { background: rgba(255,111,145,0.08); }
+  .yt-result-item:active { background: rgba(255,111,145,0.15); }
+
+  .yt-result-item img {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .yt-result-info { flex: 1; min-width: 0; }
+  .yt-result-title {
+    font-size: 0.88rem;
+    color: #4a3b3b;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+  }
+  body.night .yt-result-title { color: #f0e6ff; }
+  .yt-result-channel {
+    font-size: 0.78rem;
+    color: #9a8a8a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .yt-result-pick {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  /* Preview embed */
+  .yt-preview {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    border: 2px solid rgba(255,111,145,0.3);
+    margin-bottom: 12px;
+    display: none;
+    position: relative;
+  }
+
+  .yt-preview iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: none;
+  }
+
+  .yt-preview-label {
+    font-size: 0.8rem;
+    color: #9a8a8a;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 8px;
+    display: none;
+  }
+
+  .yt-change-btn {
+    display: none;
+    margin: 0 auto 12px;
+    padding: 6px 18px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255,111,145,0.4);
+    background: transparent;
+    color: #ff8fa3;
+    font-family: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .yt-change-btn:hover { background: rgba(255,111,145,0.1); }
+
+  .reply-song-note {
+    width: 100%;
+    min-height: 60px;
+    resize: vertical;
+    margin-top: 8px;
+  }
 
   .reply-thanks {
     text-align: center;
@@ -459,27 +671,79 @@
     <p class="signature" id="sig2"></p>
     <p class="signature" id="sig3"></p>
 
-    <div class="reply-box">
+    <!-- ══════════════════════════════════════════════ -->
+    <!--  SECCIÓN DE RESPUESTA                         -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="reply-box" id="replyBox">
       <h2 id="replyQuestion">¿Qué opinás?</h2>
-      <form id="replyForm" action="https://formspree.io/f/xgojwqlo" method="POST">
-        <input type="hidden" name="dia" id="hiddenDia" value="" />
-        <textarea name="mensaje" placeholder="Escribe lo que sientas..." required></textarea>
-        <button type="submit" id="replyButton">Enviar</button>
-      </form>
-      <p class="reply-thanks" id="replyThanks" style="display:none;">
-        Le agradezco si me llega a escribir, tenga por seguro que lo leeré 🤍
-      </p>
+
+      <!-- Tabs -->
+      <div class="reply-tabs">
+        <button id="tabMsg" class="active" onclick="switchTab('msg')">
+          ✉️ Mensaje
+        </button>
+        <button id="tabSong" onclick="switchTab('song')">
+          🎵 Respondé con una canción
+        </button>
+      </div>
+
+      <!-- Panel: mensaje de texto -->
+      <div class="reply-panel active" id="panelMsg">
+        <form id="replyFormMsg" action="https://formspree.io/f/xgojwqlo" method="POST">
+          <input type="hidden" name="dia" id="hiddenDiaMsg" value="" />
+          <input type="hidden" name="tipo" value="mensaje" />
+          <textarea name="mensaje" placeholder="Escribe lo que sientas..." required></textarea>
+          <button type="submit" class="send-btn" id="replyButtonMsg">Enviar</button>
+        </form>
+        <p class="reply-thanks" id="replyThanksMsg" style="display:none;">
+          Le agradezco si me llega a escribir, tenga por seguro que lo leeré 🤍
+        </p>
+      </div>
+
+      <!-- Panel: respuesta con canción -->
+      <div class="reply-panel" id="panelSong">
+        <p class="yt-search-hint">Buscá una canción en YouTube y elegila como tu respuesta</p>
+
+        <div class="search-field-wrap">
+          <input type="text" id="ytSearchInput" placeholder="Nombre de la canción o artista…" />
+          <button class="search-btn" id="ytSearchBtn" onclick="searchYT()">Buscar</button>
+        </div>
+
+        <!-- Lista de resultados -->
+        <div class="yt-results-list" id="ytResultsList"></div>
+
+        <!-- Preview del video elegido -->
+        <p class="yt-preview-label" id="ytPreviewLabel">Tu canción elegida:</p>
+        <div class="yt-preview" id="ytPreview">
+          <iframe id="ytPreviewIframe" src="" allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+          </iframe>
+        </div>
+        <button class="yt-change-btn" id="ytChangeBtn" onclick="clearSongChoice()">← Elegir otra</button>
+
+        <form id="replyFormSong" action="https://formspree.io/f/xgojwqlo" method="POST">
+          <input type="hidden" name="dia" id="hiddenDiaSong" value="" />
+          <input type="hidden" name="tipo" value="cancion" />
+          <input type="hidden" name="youtube_url" id="hiddenYtUrl" value="" />
+          <input type="hidden" name="youtube_titulo" id="hiddenYtTitle" value="" />
+          <textarea name="nota" class="reply-song-note"
+            placeholder="Podés agregar un mensaje si querés… (opcional)"></textarea>
+          <button type="submit" class="send-btn" id="replyButtonSong" disabled>
+            Enviar canción 🎵
+          </button>
+        </form>
+        <p class="reply-thanks" id="replyThanksSong" style="display:none;">
+          Qué bonito gesto responder con una canción 🤍 La escucharé.
+        </p>
+      </div>
     </div>
   </div>
 
   <script>
     // ═══════════════════════════════════════════════════════
-    //  LISTA DE CANCIONES — solo editá esto cada día
-    //  Cómo conseguir el trackId:
-    //    Spotify → "..." → Compartir → Copiar enlace
-    //    el ID es la parte después de /track/ y antes del "?"
+    //  LISTA DE CANCIONES
     // ═══════════════════════════════════════════════════════
-    const INICIO = "2026-06-20"; // Día 1 — no cambies esto
+    const INICIO = "2026-06-20";
 
     const canciones = [
       {
@@ -515,46 +779,42 @@
         sig3:    "La aprecio mucho.",
         pregunta: "¿Qué le dijo su espejo hoy?"
       },
-      // ── Día 4 en adelante: copiá el bloque de arriba y pegalo acá ──
-     {
+      {
         fecha:   "2026-06-23",
-         trackId: "0SRddBTphQwQcfqw4Br1uX",
-         titulo:  "Brillas",
-         mood:    "El mood de hoy es brillas muy lindo",
-         extra:   "Esta canción hace referencia a lo que le he dicho anteriormente sobre su brillo",
-         sig1:    "No deje que nadie nunca apague su luz.",
-         sig2:    "Usted vale mucho como para que alguien de la calle me la apague",
-         sig3:    "La aprecio mucho, espero que le guste.",
-         pregunta: "¿Qué opinas de la canción?"
-     },
-     {
+        trackId: "0SRddBTphQwQcfqw4Br1uX",
+        titulo:  "Brillas",
+        mood:    "El mood de hoy es brillas muy lindo",
+        extra:   "Esta canción hace referencia a lo que le he dicho anteriormente sobre su brillo",
+        sig1:    "No deje que nadie nunca apague su luz.",
+        sig2:    "Usted vale mucho como para que alguien de la calle me la apague",
+        sig3:    "La aprecio mucho, espero que le guste.",
+        pregunta: "¿Qué opinas de la canción?"
+      },
+      {
         fecha:   "2026-06-24",
-         trackId: "58cLm4PaHNt8DDr9ayZnNz",
-         titulo:  "Domar tu corazón",
-         mood:    "Sonará raro el título pero hace referencia a que me gustaría que de alguna u otra forma su corazón sea más suave conmigo.",
-         extra:   "No hablo de suave en el sentido romántico, hablo de suave en el sentido de que no te cierres tan a la ligera.",
-         sig1:    "Igual es su desición ser o no ser así.",
-         sig2:    "Al final somos lo que somos y nada ni nadie nos cambiará (o eso queremos pensar).",
-         sig3:    "La aprecio mucho, espero que le guste.",
-         pregunta: "¿Podría ser?"
-     },
+        trackId: "58cLm4PaHNt8DDr9ayZnNz",
+        titulo:  "Domar tu corazón",
+        mood:    "Sonará raro el título pero hace referencia a que me gustaría que de alguna u otra forma su corazón sea más suave conmigo.",
+        extra:   "No hablo de suave en el sentido romántico, hablo de suave en el sentido de que no te cierres tan a la ligera.",
+        sig1:    "Igual es su desición ser o no ser así.",
+        sig2:    "Al final somos lo que somos y nada ni nadie nos cambiará (o eso queremos pensar).",
+        sig3:    "La aprecio mucho, espero que le guste.",
+        pregunta: "¿Podría ser?"
+      },
     ];
 
     // ═══════════════════════════════════════════════════════
     //  NO TOQUES NADA DE ACÁ PARA ABAJO
     // ═══════════════════════════════════════════════════════
 
-    // Modo noche siempre activo
     document.body.classList.add('night');
 
-    // Calcular día actual
     const hoy = new Date().toISOString().slice(0, 10);
     const inicio = new Date(INICIO);
     const ahora  = new Date(hoy);
     const diffDias = Math.floor((ahora - inicio) / 86400000) + 1;
     document.getElementById('dayBadge').textContent = `Día ${diffDias}`;
 
-    // Buscar la canción de hoy
     const cancionHoy = canciones.find(c => c.fecha === hoy);
 
     if (cancionHoy) {
@@ -565,7 +825,8 @@
       document.getElementById('sig2').textContent        = cancionHoy.sig2 || '';
       document.getElementById('sig3').textContent        = cancionHoy.sig3 || '';
       document.getElementById('replyQuestion').textContent = cancionHoy.pregunta || '¿Qué opinás?';
-      document.getElementById('hiddenDia').value         = `Día ${diffDias} — ${hoy}`;
+      document.getElementById('hiddenDiaMsg').value  = `Día ${diffDias} — ${hoy}`;
+      document.getElementById('hiddenDiaSong').value = `Día ${diffDias} — ${hoy}`;
       document.getElementById('spotifyIframe').src =
         `https://open.spotify.com/embed/track/${cancionHoy.trackId}?utm_source=generator&theme=0`;
     } else {
@@ -600,7 +861,6 @@
         envScreen.classList.add('hidden');
         letterCard.classList.add('reveal');
 
-        // ── Notificación silenciosa de apertura ──
         const modo = document.body.classList.contains('night') ? 'Noche 🌙' : 'Día ☀️';
         const hora = new Date().toLocaleTimeString('es-CR');
         fetch('https://formspree.io/f/xgojwqlo', {
@@ -614,41 +874,211 @@
             modo:     modo,
             mensaje:  `La página fue abierta el Día ${diffDias} a las ${hora} (modo ${modo})`
           })
-        }).catch(() => {}); // silencioso, no importa si falla
+        }).catch(() => {});
       }, 1100);
     });
 
-    // Envío del formulario
-    const replyForm   = document.getElementById('replyForm');
-    const replyButton = document.getElementById('replyButton');
-    const replyThanks = document.getElementById('replyThanks');
+    // Tabs
+    function switchTab(tab) {
+      document.getElementById('tabMsg').classList.toggle('active', tab === 'msg');
+      document.getElementById('tabSong').classList.toggle('active', tab === 'song');
+      document.getElementById('panelMsg').classList.toggle('active', tab === 'msg');
+      document.getElementById('panelSong').classList.toggle('active', tab === 'song');
+    }
 
-    replyForm.addEventListener('submit', async (e) => {
+    // Envío formulario mensaje
+    const replyFormMsg   = document.getElementById('replyFormMsg');
+    const replyButtonMsg = document.getElementById('replyButtonMsg');
+    const replyThanksMsg = document.getElementById('replyThanksMsg');
+
+    replyFormMsg.addEventListener('submit', async (e) => {
       e.preventDefault();
-      replyButton.disabled = true;
-      replyButton.textContent = 'Enviando...';
-
+      replyButtonMsg.disabled = true;
+      replyButtonMsg.textContent = 'Enviando...';
       try {
-        const res = await fetch(replyForm.action, {
+        const res = await fetch(replyFormMsg.action, {
           method:  'POST',
-          body:    new FormData(replyForm),
+          body:    new FormData(replyFormMsg),
           headers: { 'Accept': 'application/json' }
         });
-
         if (res.ok) {
-          replyForm.style.display   = 'none';
-          replyThanks.style.display = 'block';
+          replyFormMsg.style.display   = 'none';
+          replyThanksMsg.style.display = 'block';
         } else {
-          replyButton.disabled = false;
-          replyButton.textContent = 'Enviar';
+          replyButtonMsg.disabled = false;
+          replyButtonMsg.textContent = 'Enviar';
           alert('Hubo un problema al enviar. Intenta de nuevo.');
         }
       } catch {
-        replyButton.disabled = false;
-        replyButton.textContent = 'Enviar';
+        replyButtonMsg.disabled = false;
+        replyButtonMsg.textContent = 'Enviar';
         alert('Hubo un problema al enviar. Intenta de nuevo.');
       }
     });
+
+    // ═══════════════════════════════════════════════════════
+    //  BÚSQUEDA DE YOUTUBE (sin API key — usa oEmbed + noembed)
+    //  Usamos la API pública de YouTube Data v3 si el usuario
+    //  provee la key, sino usamos búsqueda por URL directa.
+    //  SOLUCIÓN SIN KEY: búsqueda con invidious open instance.
+    // ═══════════════════════════════════════════════════════
+
+    let selectedVideoId   = null;
+    let selectedVideoTitle = null;
+
+    async function searchYT() {
+      const query = document.getElementById('ytSearchInput').value.trim();
+      if (!query) return;
+
+      const btn = document.getElementById('ytSearchBtn');
+      btn.disabled = true;
+      btn.textContent = '…';
+
+      const resultsList = document.getElementById('ytResultsList');
+      resultsList.innerHTML = '<div style="padding:12px;text-align:center;font-style:italic;font-size:0.85rem;color:#9a8a8a;">Buscando…</div>';
+      resultsList.style.display = 'block';
+
+      try {
+        // Invidious public API — no key needed
+        const inv = 'https://inv.nadeko.net';
+        const url = `${inv}/api/v1/search?q=${encodeURIComponent(query)}&type=video&fields=videoId,title,author,videoThumbnails`;
+        const res = await fetch(url);
+
+        if (!res.ok) throw new Error('fetch failed');
+        const data = await res.json();
+        const videos = data.slice(0, 5);
+
+        if (!videos.length) {
+          resultsList.innerHTML = '<div style="padding:12px;text-align:center;font-style:italic;font-size:0.85rem;color:#9a8a8a;">No se encontraron resultados.</div>';
+          btn.disabled = false;
+          btn.textContent = 'Buscar';
+          return;
+        }
+
+        resultsList.innerHTML = '';
+        videos.forEach(v => {
+          const thumb = (v.videoThumbnails || []).find(t => t.quality === 'medium') ||
+                        (v.videoThumbnails || [])[0] || {};
+          const item = document.createElement('div');
+          item.className = 'yt-result-item';
+          item.innerHTML = `
+            <img src="${thumb.url || ''}" alt="" onerror="this.style.display='none'"/>
+            <div class="yt-result-info">
+              <div class="yt-result-title">${escHtml(v.title)}</div>
+              <div class="yt-result-channel">${escHtml(v.author || '')}</div>
+            </div>
+            <span class="yt-result-pick">▶</span>`;
+          item.addEventListener('click', () => pickVideo(v.videoId, v.title));
+          resultsList.appendChild(item);
+        });
+
+      } catch (err) {
+        // Fallback: mostrar un campo de URL manual
+        resultsList.innerHTML = `
+          <div style="padding:14px;">
+            <p style="margin:0 0 10px;font-size:0.85rem;color:#9a8a8a;font-style:italic;">
+              No pude buscar automáticamente. Pegá el link de YouTube acá:
+            </p>
+            <input type="text" id="ytManualUrl" placeholder="https://www.youtube.com/watch?v=..."
+              style="width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,0.12);
+              background:rgba(255,255,255,0.6);padding:10px 12px;font-size:0.9rem;
+              font-family:inherit;outline:none;color:#4a3b3b;" />
+            <button onclick="pickFromUrl()" style="margin-top:10px;padding:8px 20px;border-radius:999px;
+              border:none;background:linear-gradient(135deg,#ff8fa3,#ff6f91);color:#fff;
+              font-family:inherit;font-size:0.88rem;cursor:pointer;">Usar este video</button>
+          </div>`;
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Buscar';
+    }
+
+    function pickFromUrl() {
+      const rawUrl = document.getElementById('ytManualUrl').value.trim();
+      const vid = extractYtId(rawUrl);
+      if (!vid) { alert('URL de YouTube no válida.'); return; }
+      pickVideo(vid, rawUrl);
+    }
+
+    function extractYtId(url) {
+      const m = url.match(/(?:v=|youtu\.be\/|\/embed\/)([A-Za-z0-9_-]{11})/);
+      return m ? m[1] : null;
+    }
+
+    function pickVideo(videoId, title) {
+      selectedVideoId    = videoId;
+      selectedVideoTitle = title;
+
+      document.getElementById('ytResultsList').style.display  = 'none';
+      document.getElementById('ytPreviewLabel').style.display = 'block';
+      document.getElementById('ytPreview').style.display      = 'block';
+      document.getElementById('ytChangeBtn').style.display    = 'block';
+      document.getElementById('ytPreviewIframe').src =
+        `https://www.youtube.com/embed/${videoId}?rel=0`;
+      document.getElementById('hiddenYtUrl').value   = `https://www.youtube.com/watch?v=${videoId}`;
+      document.getElementById('hiddenYtTitle').value = title;
+      document.getElementById('replyButtonSong').disabled = false;
+    }
+
+    function clearSongChoice() {
+      selectedVideoId = null;
+      selectedVideoTitle = null;
+      document.getElementById('ytPreviewIframe').src = '';
+      document.getElementById('ytPreview').style.display      = 'none';
+      document.getElementById('ytPreviewLabel').style.display = 'none';
+      document.getElementById('ytChangeBtn').style.display    = 'none';
+      document.getElementById('ytResultsList').style.display  = 'none';
+      document.getElementById('ytResultsList').innerHTML      = '';
+      document.getElementById('ytSearchInput').value          = '';
+      document.getElementById('hiddenYtUrl').value            = '';
+      document.getElementById('hiddenYtTitle').value          = '';
+      document.getElementById('replyButtonSong').disabled     = true;
+    }
+
+    // Enter key en el buscador
+    document.getElementById('ytSearchInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); searchYT(); }
+    });
+
+    // Envío formulario canción
+    const replyFormSong    = document.getElementById('replyFormSong');
+    const replyButtonSong  = document.getElementById('replyButtonSong');
+    const replyThanksSong  = document.getElementById('replyThanksSong');
+
+    replyFormSong.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!selectedVideoId) return;
+      replyButtonSong.disabled = true;
+      replyButtonSong.textContent = 'Enviando…';
+      try {
+        const res = await fetch(replyFormSong.action, {
+          method:  'POST',
+          body:    new FormData(replyFormSong),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          replyFormSong.style.display   = 'none';
+          document.getElementById('ytPreview').style.display      = 'none';
+          document.getElementById('ytPreviewLabel').style.display = 'none';
+          document.getElementById('ytChangeBtn').style.display    = 'none';
+          replyThanksSong.style.display = 'block';
+        } else {
+          replyButtonSong.disabled = false;
+          replyButtonSong.textContent = 'Enviar canción 🎵';
+          alert('Hubo un problema al enviar. Intenta de nuevo.');
+        }
+      } catch {
+        replyButtonSong.disabled = false;
+        replyButtonSong.textContent = 'Enviar canción 🎵';
+        alert('Hubo un problema al enviar. Intenta de nuevo.');
+      }
+    });
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
   </script>
 </body>
 </html>
