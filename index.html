@@ -800,7 +800,7 @@
           ✉️ Mensaje
         </button>
         <button id="tabSong" onclick="switchTab('song')">
-          🎵 Respondé con una canción
+          🎵 Puedes responde con una canción 🎵
         </button>
       </div>
 
@@ -809,7 +809,7 @@
         <form id="replyFormMsg" action="https://formspree.io/f/xgojwqlo" method="POST">
           <input type="hidden" name="dia" id="hiddenDiaMsg" value="" />
           <input type="hidden" name="tipo" value="mensaje" />
-          <textarea name="mensaje" placeholder="Escribe lo que sientas..." required></textarea>
+          <textarea name="mensaje" placeholder="Escribe lo que gustes jsjs" required></textarea>
           <button type="submit" class="send-btn" id="replyButtonMsg">Enviar</button>
         </form>
         <p class="reply-thanks" id="replyThanksMsg" style="display:none;">
@@ -819,7 +819,7 @@
 
       <!-- Panel: respuesta con canción -->
       <div class="reply-panel" id="panelSong">
-        <p class="yt-search-hint">Buscá una canción en YouTube y elegila como tu respuesta</p>
+        <p class="yt-search-hint">Una canción también es una buena opción.</p>
 
         <div class="search-field-wrap">
           <input type="text" id="ytSearchInput" placeholder="Nombre de la canción o artista…" />
@@ -844,13 +844,13 @@
           <input type="hidden" name="youtube_url" id="hiddenYtUrl" value="" />
           <input type="hidden" name="youtube_titulo" id="hiddenYtTitle" value="" />
           <textarea name="nota" class="reply-song-note"
-            placeholder="Podés agregar un mensaje si querés… (opcional)"></textarea>
+            placeholder="Si gustas también puedes agregar un mensajito."></textarea>
           <button type="submit" class="send-btn" id="replyButtonSong" disabled>
             Enviar canción 🎵
           </button>
         </form>
         <p class="reply-thanks" id="replyThanksSong" style="display:none;">
-          Qué bonito gesto responder con una canción 🤍 La escucharé.
+           La escucharé 🤍 Eso téngalo por seguro.
         </p>
       </div>
     </div>
@@ -917,6 +917,17 @@
         sig2:    "Al final somos lo que somos y nada ni nadie nos cambiará (o eso queremos pensar).",
         sig3:    "La aprecio mucho, espero que le guste.",
         pregunta: "¿Podría ser?"
+      },
+       {
+        fecha:   "2026-06-25",
+        trackId: "24dVPDRHuJMzaJpc8ItjDy",
+        titulo:  "AIRE",
+        mood:    "Me falta el aire.",
+        extra:   "Esta es una de las sensaciones que tengo cada vez que estoy mal, supongo que es solo tristeza.",
+        sig1:    "También podría ser simple debilidad y/o ganas de sentirme así.",
+        sig2:    "A veces nos saboteamos a nosotros mismos.",
+        sig3:    "La aprecio mucho.",
+        pregunta: "¿Sientes que alguna vez te ha faltado el aire de esa forma?"
       },
     ];
 
