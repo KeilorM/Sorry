@@ -733,7 +733,7 @@
           </button>
         </form>
         <p class="reply-thanks" id="replyThanksSong" style="display:none;">
-          Qué bonito gesto responder con una canción 🤍 La escucharé.
+          La escucharé 🤍 Eso téngalo por seguro.
         </p>
       </div>
     </div>
@@ -800,6 +800,17 @@
         sig2:    "Al final somos lo que somos y nada ni nadie nos cambiará (o eso queremos pensar).",
         sig3:    "La aprecio mucho, espero que le guste.",
         pregunta: "¿Podría ser?"
+      },
+      {
+        fecha:   "2026-06-25",
+        trackId: "24dVPDRHuJMzaJpc8ItjDy",
+        titulo:  "AIRE",
+        mood:    "Me falta el aire.",
+        extra:   "Esta es una de las sensaciones que tengo cada vez que estoy mal, supongo que es solo tristeza.",
+        sig1:    "También podría ser simple debilidad y/o ganas de sentirme así.",
+        sig2:    "A veces nos saboteamos a nosotros mismos.",
+        sig3:    "La aprecio mucho.",
+        pregunta: "¿Sientes que alguna vez te ha faltado el aire de esa forma?"
       },
     ];
 
@@ -917,11 +928,9 @@
     });
 
     // ═══════════════════════════════════════════════════════
-    //  BÚSQUEDA DE YOUTUBE (sin API key — usa oEmbed + noembed)
-    //  Usamos la API pública de YouTube Data v3 si el usuario
-    //  provee la key, sino usamos búsqueda por URL directa.
-    //  SOLUCIÓN SIN KEY: búsqueda con invidious open instance.
+    //  BÚSQUEDA DE YOUTUBE — YouTube Data API v3
     // ═══════════════════════════════════════════════════════
+    const YT_KEY = 'AIzaSyD6Ua4EH5iuBXlnSrwE-wxGl7oMUm1G31A';
 
     let selectedVideoId   = null;
     let selectedVideoTitle = null;
@@ -939,16 +948,13 @@
       resultsList.style.display = 'block';
 
       try {
-        // Invidious public API — no key needed
-        const inv = 'https://inv.nadeko.net';
-        const url = `${inv}/api/v1/search?q=${encodeURIComponent(query)}&type=video&fields=videoId,title,author,videoThumbnails`;
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${encodeURIComponent(query)}&key=${YT_KEY}`;
         const res = await fetch(url);
-
-        if (!res.ok) throw new Error('fetch failed');
+        if (!res.ok) throw new Error('api error');
         const data = await res.json();
-        const videos = data.slice(0, 5);
+        const items = data.items || [];
 
-        if (!videos.length) {
+        if (!items.length) {
           resultsList.innerHTML = '<div style="padding:12px;text-align:center;font-style:italic;font-size:0.85rem;color:#9a8a8a;">No se encontraron resultados.</div>';
           btn.disabled = false;
           btn.textContent = 'Buscar';
@@ -956,48 +962,31 @@
         }
 
         resultsList.innerHTML = '';
-        videos.forEach(v => {
-          const thumb = (v.videoThumbnails || []).find(t => t.quality === 'medium') ||
-                        (v.videoThumbnails || [])[0] || {};
-          const item = document.createElement('div');
-          item.className = 'yt-result-item';
-          item.innerHTML = `
-            <img src="${thumb.url || ''}" alt="" onerror="this.style.display='none'"/>
+        items.forEach(item => {
+          const videoId = item.id.videoId;
+          const title   = item.snippet.title;
+          const channel = item.snippet.channelTitle;
+          const thumb   = item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || '';
+
+          const el = document.createElement('div');
+          el.className = 'yt-result-item';
+          el.innerHTML = `
+            <img src="${escHtml(thumb)}" alt="" onerror="this.style.display='none'"/>
             <div class="yt-result-info">
-              <div class="yt-result-title">${escHtml(v.title)}</div>
-              <div class="yt-result-channel">${escHtml(v.author || '')}</div>
+              <div class="yt-result-title">${escHtml(title)}</div>
+              <div class="yt-result-channel">${escHtml(channel)}</div>
             </div>
             <span class="yt-result-pick">▶</span>`;
-          item.addEventListener('click', () => pickVideo(v.videoId, v.title));
-          resultsList.appendChild(item);
+          el.addEventListener('click', () => pickVideo(videoId, title));
+          resultsList.appendChild(el);
         });
 
       } catch (err) {
-        // Fallback: mostrar un campo de URL manual
-        resultsList.innerHTML = `
-          <div style="padding:14px;">
-            <p style="margin:0 0 10px;font-size:0.85rem;color:#9a8a8a;font-style:italic;">
-              No pude buscar automáticamente. Pegá el link de YouTube acá:
-            </p>
-            <input type="text" id="ytManualUrl" placeholder="https://www.youtube.com/watch?v=..."
-              style="width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,0.12);
-              background:rgba(255,255,255,0.6);padding:10px 12px;font-size:0.9rem;
-              font-family:inherit;outline:none;color:#4a3b3b;" />
-            <button onclick="pickFromUrl()" style="margin-top:10px;padding:8px 20px;border-radius:999px;
-              border:none;background:linear-gradient(135deg,#ff8fa3,#ff6f91);color:#fff;
-              font-family:inherit;font-size:0.88rem;cursor:pointer;">Usar este video</button>
-          </div>`;
+        resultsList.innerHTML = '<div style="padding:12px;text-align:center;font-style:italic;font-size:0.85rem;color:#9a8a8a;">Hubo un error al buscar. Intentá de nuevo.</div>';
       }
 
       btn.disabled = false;
       btn.textContent = 'Buscar';
-    }
-
-    function pickFromUrl() {
-      const rawUrl = document.getElementById('ytManualUrl').value.trim();
-      const vid = extractYtId(rawUrl);
-      if (!vid) { alert('URL de YouTube no válida.'); return; }
-      pickVideo(vid, rawUrl);
     }
 
     function extractYtId(url) {
