@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Día de las Flores Amarillas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Karla:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:      #FBF3DE;
+    --butter:     #F7E3A1;
+    --marigold:   #E8A33D;
+    --amber:      #B8752E;
+    --leaf:       #7C8A52;
+    --leaf-dark:  #5B6A3C;
+    --ink:        #493A22;
+    --ink-soft:   #7A6A48;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
+  }
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+  body {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Karla', sans-serif;
+    background: radial-gradient(ellipse at 20% 15%, #FDF6DE 0%, var(--cream) 45%, #F3E2AE 100%);
+    padding: 24px;
+    position: relative;
+  }
+
+  h1, h2 { font-family: 'Fraunces', serif; }
+
+  .petal-field {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 5;
+  }
+
+  .petal {
+    position: absolute;
+    top: -30px;
+    width: 14px;
+    height: 10px;
+    background: var(--marigold);
+    border-radius: 60% 20% 60% 20%;
+    opacity: 0.7;
+    animation-name: petalFall;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+  .petal.alt   { background: var(--butter); border-radius: 20% 60% 20% 60%; }
+  .petal.alt2  { background: #D98B2B; width: 11px; height: 8px; }
+
+  @keyframes petalFall {
+    0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.7; }
+    50%  { transform: translateY(48vh) translateX(24px) rotate(160deg); }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(102vh) translateX(-16px) rotate(320deg); opacity: 0; }
+  }
+
+  .bloom-screen {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .stem {
+    width: 5px;
+    height: 64px;
+    background: linear-gradient(to bottom, var(--leaf), var(--leaf-dark));
+    border-radius: 3px;
+    margin-top: -6px;
+    transition: opacity 0.4s ease;
+  }
+
+  .flower-wrap {
+    width: 220px;
+    height: 220px;
+    animation: sway 3.6s ease-in-out infinite;
+  }
+
+  @keyframes sway {
+    0%, 100% { transform: rotate(-2deg); }
+    50%      { transform: rotate(2deg); }
+  }
+
+  .petal-shape {
+    transform-origin: 100px 100px;
+    transition: transform 1s cubic-bezier(.34,1.4,.4,1), opacity 0.6s ease;
+  }
+
+  .flower-wrap.bud .petal-shape {
+    transform: scale(0.18) rotate(var(--rot));
+  }
+
+  .flower-wrap.open .petal-shape {
+    transform: scale(1) rotate(var(--rot));
+    transition-delay: var(--delay);
+  }
+
+  .flower-center {
+    transition: transform 0.8s ease 0.3s;
+  }
+  .flower-wrap.bud .flower-center { transform: scale(0.7); }
+
+  .bloom-hint {
+    margin-top: 22px;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    letter-spacing: 0.2px;
+    animation: hintPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes hintPulse {
+    0%, 100% { opacity: 0.5; }
+    50%      { opacity: 1; }
+  }
+
+  .bloom-screen.opening .flower-wrap { animation: none; }
+  .bloom-screen.opening .stem { opacity: 0; }
+  .bloom-screen.opening .bloom-hint { opacity: 0; transition: opacity 0.3s ease; }
+  .bloom-screen.opening .flower-wrap { animation: bloomShrink 0.7s ease 1.05s forwards; }
+
+  @keyframes bloomShrink {
+    to { transform: translateY(30px) scale(0.85); opacity: 0; }
+  }
+
+  .bloom-screen.hidden { display: none; }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 252, 240, 0.86);
+    backdrop-filter: blur(10px);
+    border-radius: 22px;
+    border: 1px solid rgba(184, 117, 46, 0.15);
+    box-shadow: 0 24px 60px rgba(122, 90, 30, 0.18);
+    max-width: 540px;
+    width: 100%;
+    padding: 52px 44px;
+    text-align: center;
+    display: none;
+    opacity: 0;
+  }
+
+  .card.reveal {
+    display: block;
+    animation: cardRise 0.9s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+
+  @keyframes cardRise {
+    from { opacity: 0; transform: translateY(50px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .card-mark {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 18px;
+  }
+
+  .day-badge {
+    display: inline-block;
+    background: rgba(232, 163, 61, 0.16);
+    color: var(--amber);
+    border-radius: 999px;
+    padding: 5px 18px;
+    font-size: 0.8rem;
+    letter-spacing: 0.4px;
+    margin-bottom: 18px;
+    font-family: 'Karla', sans-serif;
+    font-weight: 500;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 6px;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0 0 26px;
+  }
+
+  p {
+    color: #5f4f30;
+    line-height: 1.75;
+    font-size: 1.03rem;
+    margin: 0 0 16px;
+    text-align: left;
+  }
+
+  .tradition-note {
+    margin-top: 24px;
+    padding: 16px 18px;
+    background: rgba(124, 138, 82, 0.1);
+    border-left: 3px solid var(--leaf);
+    border-radius: 4px;
+    font-size: 0.92rem;
+    color: var(--leaf-dark);
+    text-align: left;
+    line-height: 1.6;
+  }
+
+  .signature {
+    margin-top: 26px;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    text-align: right;
+  }
+
+  .spotify-wrapper {
+    margin-top: 30px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 26px rgba(122, 90, 30, 0.18);
+    width: 100%;
+  }
+
+  .spotify-wrapper iframe {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 38px 28px; border-radius: 18px; }
+    h1 { font-size: 1.65rem; }
+    p { font-size: 0.98rem; }
+    .flower-wrap { width: 180px; height: 180px; }
+    .spotify-wrapper iframe { height: 232px; }
+  }
+
+  @media (max-width: 380px) {
+    body { padding: 14px; }
+    .card { padding: 30px 20px; border-radius: 16px; }
+    h1 { font-size: 1.42rem; }
+    .flower-wrap { width: 150px; height: 150px; }
+    .spotify-wrapper iframe { height: 152px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="petal-field" id="petalField"></div>
+
+  <div class="bloom-screen" id="bloomScreen">
+    <div class="flower-wrap bud" id="flowerWrap">
+      <svg viewBox="0 0 200 200" width="100%" height="100%">
+        <g>
+          <ellipse class="petal-shape" style="--rot:0deg;   --delay:0.00s" cx="100" cy="55" rx="26" ry="42" fill="#F0B94A"/>
+          <ellipse class="petal-shape" style="--rot:45deg;  --delay:0.05s" cx="100" cy="55" rx="26" ry="42" fill="#EAA83A"/>
+          <ellipse class="petal-shape" style="--rot:90deg;  --delay:0.10s" cx="100" cy="55" rx="26" ry="42" fill="#F0B94A"/>
+          <ellipse class="petal-shape" style="--rot:135deg; --delay:0.15s" cx="100" cy="55" rx="26" ry="42" fill="#EAA83A"/>
+          <ellipse class="petal-shape" style="--rot:180deg; --delay:0.20s" cx="100" cy="55" rx="26" ry="42" fill="#F0B94A"/>
+          <ellipse class="petal-shape" style="--rot:225deg; --delay:0.25s" cx="100" cy="55" rx="26" ry="42" fill="#EAA83A"/>
+          <ellipse class="petal-shape" style="--rot:270deg; --delay:0.30s" cx="100" cy="55" rx="26" ry="42" fill="#F0B94A"/>
+          <ellipse class="petal-shape" style="--rot:315deg; --delay:0.35s" cx="100" cy="55" rx="26" ry="42" fill="#EAA83A"/>
+        </g>
+        <circle class="flower-center" cx="100" cy="100" r="22" fill="#B8752E"/>
+        <circle class="flower-center" cx="100" cy="100" r="22" fill="url(#centerTexture)" opacity="0.5"/>
+        <defs>
+          <radialGradient id="centerTexture" cx="35%" cy="35%" r="70%">
+            <stop offset="0%" stop-color="#D98B2B"/>
+            <stop offset="100%" stop-color="#8A5A20"/>
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="stem"></div>
+    <div class="bloom-hint">Toca la flor para que florezca ✨</div>
+  </div>
+
+  <div class="card" id="letterCard">
+    <span class="day-badge">21 de septiembre</span>
+    <h1>Feliz Día de las Flores Amarillas</h1>
+    <p class="subtitle">Esta es para usted mi amor 🌼</p>
+    <p class="subtitle">Ya que no está conmigo al menos le hago esto.</p>
+
+    <p>
+      Te amo más de lo que imaginas mi vida.
+    </p>
+
+    <div class="tradition-note">
+      La tradición cuenta que quien recibe una flor amarilla el 21 de septiembre
+      tendrá suerte en el amor durante el resto del año. Así que, por si acaso,
+      aquí va la suya. Empecé tarde, pero al menos empecé.
+    </div>
+
+    <div class="spotify-wrapper" id="spotifyWrapper">
+      <iframe id="spotifyIframe"
+        style="border-radius:12px"
+        src="https://open.spotify.com/embed/track/1jlKdNbOA90rjnt88GJnwO?utm_source=generator&theme=0"
+        width="100%"
+        height="352"
+        frameborder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    </div>
+
+    <p class="signature">Con cariño, don kelor🌼</p>
+  </div>
+
+  <script>
+    const field   = document.getElementById('petalField');
+    const clases  = ['', 'alt', 'alt2'];
+    const total   = window.innerWidth < 500 ? 14 : 22;
+
+    for (let i = 0; i < total; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal ' + clases[Math.floor(Math.random() * clases.length)];
+      p.style.left              = (Math.random() * 100) + 'vw';
+      p.style.animationDuration = (9 + Math.random() * 8) + 's';
+      p.style.animationDelay    = '-' + (Math.random() * 14) + 's';
+      field.appendChild(p);
+    }
+
+    const bloomScreen = document.getElementById('bloomScreen');
+    const flowerWrap   = document.getElementById('flowerWrap');
+    const letterCard   = document.getElementById('letterCard');
+
+    bloomScreen.addEventListener('click', () => {
+      if (bloomScreen.classList.contains('opening')) return;
+      flowerWrap.classList.remove('bud');
+      flowerWrap.classList.add('open');
+      bloomScreen.classList.add('opening');
+
+      setTimeout(() => {
+        bloomScreen.classList.add('hidden');
+        letterCard.classList.add('reveal');
+      }, 1750);
+    });
+  </script>
+</body>
+</html>
